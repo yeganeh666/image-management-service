@@ -1,0 +1,8 @@
+postgres:
+  connection:
+    file_path: "./config/postgres.secret"
+  host: ""
+  port: 5432
+  db: ""
+  user: ""
+  pass: ""
