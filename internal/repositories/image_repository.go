@@ -12,7 +12,7 @@ type ImageRepositoryImpl struct {
 	*Repository
 }
 
-func NewImageRepositoryImpl(Repository *Repository) ImageRepository {
+func NewImageRepository(Repository *Repository) ImageRepository {
 	return &ImageRepositoryImpl{
 		Repository: Repository,
 	}

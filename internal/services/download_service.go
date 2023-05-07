@@ -12,7 +12,7 @@ import (
 )
 
 type DownloaderService interface {
-	Download(url string, dir string, wg *sync.WaitGroup) error
+	Download(url string, wg *sync.WaitGroup) error
 }
 
 type DownloaderServiceImpl struct {
@@ -26,11 +26,11 @@ func NewDownloaderService(service *Service) DownloaderService {
 }
 
 // Download an image from a given URL and save it to the specified directory
-func (s DownloaderServiceImpl) Download(url string, dir string, wg *sync.WaitGroup) error {
+func (s DownloaderServiceImpl) Download(url string, wg *sync.WaitGroup) error {
 	defer wg.Done()
-
+	downloadPath := s.Config.Image.DownloadPath
 	// Create the directory if it doesn't exist
-	err := os.MkdirAll(dir, 0755)
+	err := os.MkdirAll(downloadPath, 0755)
 	if err != nil {
 		fmt.Println("Error creating directory:", err)
 		return err
@@ -48,7 +48,7 @@ func (s DownloaderServiceImpl) Download(url string, dir string, wg *sync.WaitGro
 	fileName := filepath.Base(url)
 
 	// Create a new file in the specified directory
-	path := filepath.Join(dir, fileName)
+	path := filepath.Join(downloadPath, fileName)
 	file, err := os.Create(path)
 	if err != nil {
 		fmt.Println("Error creating file:", err)

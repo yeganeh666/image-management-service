@@ -13,7 +13,7 @@ type Repository struct {
 	DB  *gorm.DB
 }
 
-func NewRepository(conf *config.Config, log *logrus.Logger) (*Repository, error) {
+func NewRepository(log *logrus.Logger, conf *config.Config) (*Repository, error) {
 
 	db, err := gormext.Open(conf.Postgres.Connection.GetValue())
 	if err != nil {

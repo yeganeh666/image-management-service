@@ -6,3 +6,8 @@ postgres:
   db: ""
   user: ""
   pass: ""
+image:
+  source:
+    file_path: "./data/links.txt"
+  upload_path: "./images/user-content"
+  download_path: "./images/"

@@ -29,7 +29,7 @@ func (h *ImageHandlerImpl) HandleImagesUpload(c *gin.Context) {
 	// Loop through the uploaded files and handle each one concurrently
 	for _, file := range files {
 		wg.Add(1)
-		go h.ImageService.Upload(file, UploadPath, wg)
+		go h.ImageService.Upload(file, wg)
 	}
 
 	// Wait for all the image uploads to finish before responding to the client

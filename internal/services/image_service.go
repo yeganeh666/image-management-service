@@ -14,7 +14,7 @@ import (
 )
 
 type ImageService interface {
-	Upload(file *multipart.FileHeader, dir string, wg sync.WaitGroup) error
+	Upload(file *multipart.FileHeader, wg sync.WaitGroup) error
 	List() ([]*models.Image, error)
 	Get(id string) ([]byte, error)
 }
@@ -29,7 +29,7 @@ func NewImageService(service *Service) ImageService {
 	}
 }
 
-func (s ImageServiceImpl) Upload(file *multipart.FileHeader, dir string, wg sync.WaitGroup) error {
+func (s ImageServiceImpl) Upload(file *multipart.FileHeader, wg sync.WaitGroup) error {
 	defer wg.Done()
 
 	// Open the uploaded file
@@ -46,7 +46,7 @@ func (s ImageServiceImpl) Upload(file *multipart.FileHeader, dir string, wg sync
 	name := filename[0 : len(filename)-len(ext)]
 	timestamp := time.Now().Format("20060102150405")
 	dstName := fmt.Sprintf("%s-%s%s", name, timestamp, ext)
-	path := filepath.Join("images", "user-content", dstName)
+	path := filepath.Join(s.Config.Image.UploadPath, dstName)
 	dst, err := os.Create(path)
 	if err != nil {
 		log.Errorf("failed to create file %q: %v", dstName, err)
@@ -111,7 +111,7 @@ func (s ImageServiceImpl) Get(id string) ([]byte, error) {
 		return nil, err
 	}
 
-	data, err := ioutil.ReadFile("./images/" + image.LocalName)
+	data, err := ioutil.ReadFile(s.Config.Image.DownloadPath + image.LocalName)
 	if err != nil {
 		log.WithError(err).Error("failed to read images directory")
 		return nil, err
