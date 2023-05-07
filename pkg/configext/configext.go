@@ -121,7 +121,7 @@ func (c *Config) readConf() error {
 	return nil
 }
 
-func NewConfig(path string, serviceName string, internalDefaultConfig []byte) *Config {
+func NewConfig(path string, serviceName string, internalDefaultConfig []byte) (*Config, error) {
 	conf := Config{
 		internalDefaultConf: internalDefaultConfig,
 		configPath:          path,
@@ -129,8 +129,8 @@ func NewConfig(path string, serviceName string, internalDefaultConfig []byte) *C
 	}
 	err := conf.loadConf()
 	if err != nil {
-		log.Fatalf("Load yaml config file error: '%v'", err)
-		return nil
+		log.WithError(err).Error("Load yaml config file error")
+		return nil, err
 	}
-	return &conf
+	return &conf, nil
 }

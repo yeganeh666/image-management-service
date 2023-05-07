@@ -3,3 +3,5 @@
 .metals
 # Secret files
 *.secret
+
+/images/*

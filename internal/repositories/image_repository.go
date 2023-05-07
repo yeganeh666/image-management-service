@@ -13,3 +13,20 @@ type Image struct {
 	FileSize      int64     `json:"file_size"`
 	DownloadDate  time.Time `json:"download_date"`
 }
+type ImageRepository interface {
+	SaveImage(*Image) (*Image, error)
+}
+
+type ImageRepositoryImpl struct {
+	*Repository
+}
+
+func (r *ImageRepositoryImpl) SaveImage(img *Image) error {
+	return r.DB.Save(img).Error
+}
+
+func NewImageRepositoryImpl(Repository *Repository) *ImageRepositoryImpl {
+	return &ImageRepositoryImpl{
+		Repository: Repository,
+	}
+}
