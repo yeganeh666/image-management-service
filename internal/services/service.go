@@ -7,10 +7,10 @@ import (
 
 type Service struct {
 	log             *log.Logger
-	ImageRepository *repositories.ImageRepositoryImpl
+	ImageRepository repositories.ImageRepository
 }
 
-func NewService(imageRepository *repositories.ImageRepositoryImpl, log *log.Logger) *Service {
+func NewService(imageRepository repositories.ImageRepository, log *log.Logger) *Service {
 	return &Service{
 		log:             log,
 		ImageRepository: imageRepository,

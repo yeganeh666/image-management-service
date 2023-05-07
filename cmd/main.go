@@ -12,14 +12,19 @@ import (
 const ServiceName = "ImageService"
 
 func main() {
-	conf := config.NewConfig(ServiceName)
 	log := logrus.New()
-	repository, err := repositories.NewRepository(conf, log)
+	conf, err := config.NewConfig(ServiceName)
 	if err != nil {
-		log.WithError(err).Fatal("Failed to create repository")
+		panic("failed to load service configuration")
 	}
 
-	service := services.NewService(repositories.NewImageRepositoryImpl(repository), log)
+	repository, err := repositories.NewRepository(conf, log)
+	if err != nil {
+		panic("Failed to create repository")
+	}
+
+	imageRepository := repositories.NewImageRepositoryImpl(repository)
+	service := services.NewService(imageRepository, log)
 	handler := handlers.NewImageHandler(
 		services.NewImageService(service),
 		services.NewDownloaderService(service))
@@ -28,7 +33,11 @@ func main() {
 	r.Use(func(c *gin.Context) {
 		c.Next()
 	})
+
+	r.GET("/images", handler.HandleImagesList)
+	r.GET("/images/:id", handler.HandleDownloadImage)
 	r.GET("/images/download", handler.HandleImagesDownload)
+	r.POST("/images/upload", handler.HandleImagesUpload)
 
 	// Start the server
 	if err := r.Run(":8080"); err != nil {

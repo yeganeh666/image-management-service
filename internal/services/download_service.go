@@ -2,7 +2,7 @@ package services
 
 import (
 	"fmt"
-	"image-management-service/internal/repositories"
+	"image-management-service/internal/models"
 	"io"
 	"net/http"
 	"os"
@@ -11,15 +11,15 @@ import (
 	"time"
 )
 
-type Downloader interface {
-	Download(url string, dir string, wg *sync.WaitGroup) (*repositories.Image, error)
+type DownloaderService interface {
+	Download(url string, dir string, wg *sync.WaitGroup) error
 }
 
 type DownloaderServiceImpl struct {
 	*Service
 }
 
-func NewDownloaderService(service *Service) *DownloaderServiceImpl {
+func NewDownloaderService(service *Service) DownloaderService {
 	return &DownloaderServiceImpl{
 		Service: service,
 	}
@@ -48,7 +48,8 @@ func (s DownloaderServiceImpl) Download(url string, dir string, wg *sync.WaitGro
 	fileName := filepath.Base(url)
 
 	// Create a new file in the specified directory
-	file, err := os.Create(filepath.Join(dir, fileName))
+	path := filepath.Join(dir, fileName)
+	file, err := os.Create(path)
 	if err != nil {
 		fmt.Println("Error creating file:", err)
 		return err
@@ -61,13 +62,14 @@ func (s DownloaderServiceImpl) Download(url string, dir string, wg *sync.WaitGro
 		fmt.Println("Error saving image:", err)
 		return err
 	}
-	image := &repositories.Image{
+	image := &models.Image{
 		OriginalURL:   url,
 		LocalName:     fileName,
+		Path:          path,
 		FileExtension: "",
 		FileSize:      0,
 		DownloadDate:  time.Now(),
 	}
 	fmt.Println("Downloaded:", fileName)
-	return s.ImageRepository.SaveImage(image)
+	return s.ImageRepository.Save(image)
 }

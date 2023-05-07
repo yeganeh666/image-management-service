@@ -11,7 +11,7 @@ import (
 
 const (
 	DirectoryName   = "images"
-	sourceDirectory = "links.txt"
+	sourceDirectory = "./data/links.txt"
 )
 
 func (h *ImageHandlerImpl) HandleImagesDownload(c *gin.Context) {

@@ -3,11 +3,11 @@ package handlers
 import "image-management-service/internal/services"
 
 type ImageHandlerImpl struct {
-	ImageService      *services.ImageServiceImpl
-	DownloaderService *services.DownloaderServiceImpl
+	ImageService      services.ImageService
+	DownloaderService services.DownloaderService
 }
 
-func NewImageHandler(imageService *services.ImageServiceImpl, downloaderService *services.DownloaderServiceImpl) *ImageHandlerImpl {
+func NewImageHandler(imageService services.ImageService, downloaderService services.DownloaderService) *ImageHandlerImpl {
 	return &ImageHandlerImpl{
 		ImageService:      imageService,
 		DownloaderService: downloaderService,
