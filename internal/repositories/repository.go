@@ -4,6 +4,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"image-management-service/config"
+	"image-management-service/internal/models"
 	"image-management-service/pkg/gormext"
 )
 
@@ -12,7 +13,7 @@ type Repository struct {
 	DB  *gorm.DB
 }
 
-func NewRepository(conf *config.Config, log *logrus.Logger) (*Repository, error) {
+func NewRepository(log *logrus.Logger, conf *config.Config) (*Repository, error) {
 
 	db, err := gormext.Open(conf.Postgres.Connection.GetValue())
 	if err != nil {
@@ -24,7 +25,7 @@ func NewRepository(conf *config.Config, log *logrus.Logger) (*Repository, error)
 			return err
 		}
 		if err = tx.AutoMigrate(
-			new(Image),
+			new(models.Image),
 		); err != nil {
 			return err
 		}

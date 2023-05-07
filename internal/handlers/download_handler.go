@@ -14,9 +14,9 @@ const (
 	sourceDirectory = "./data/links.txt"
 )
 
-func (h *ImageHandlerImpl) HandleImagesDownload(c *gin.Context) {
+func (h *ImageHandlerImpl) HandleDownloadImages(c *gin.Context) {
 	// Open the links.txt file
-	file, err := os.Open(sourceDirectory)
+	file, err := os.Open(h.Config.Image.Source.FilePath)
 	if err != nil {
 		c.String(http.StatusInternalServerError, "Error opening file")
 		return
@@ -30,7 +30,7 @@ func (h *ImageHandlerImpl) HandleImagesDownload(c *gin.Context) {
 		url := scanner.Text()
 		if validation.IsValidImageURL(url) {
 			wg.Add(1)
-			go h.DownloaderService.Download(url, DirectoryName, &wg)
+			go h.DownloaderService.Download(url, &wg)
 		}
 	}
 	if err := scanner.Err(); err != nil {

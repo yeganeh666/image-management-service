@@ -29,8 +29,15 @@ type Config struct {
 
 	HTTP     SectionHttp     `yaml:"http"`
 	Core     SectionCore     `yaml:"core"`
-	Postgres SectionPostgres `yaml:"postgres"`
 	Log      SectionLog      `yaml:"log"`
+	Image    SectionImage    `yaml:"postgres"`
+	Postgres SectionPostgres `yaml:"postgres"`
+}
+
+type SectionImage struct {
+	UploadPath   string     `mapstructure:"upload_path"`
+	DownloadPath string     `mapstructure:"download_path"`
+	Source       FileConfig `mapstructure:"source"`
 }
 
 type SectionCore struct {
