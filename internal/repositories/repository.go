@@ -4,6 +4,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"image-management-service/config"
+	"image-management-service/internal/models"
 	"image-management-service/pkg/gormext"
 )
 
@@ -24,7 +25,7 @@ func NewRepository(conf *config.Config, log *logrus.Logger) (*Repository, error)
 			return err
 		}
 		if err = tx.AutoMigrate(
-			new(Image),
+			new(models.Image),
 		); err != nil {
 			return err
 		}
