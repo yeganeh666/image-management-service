@@ -9,11 +9,13 @@ import (
 	"sync"
 )
 
-const (
-	DirectoryName   = "images"
-	sourceDirectory = "./data/links.txt"
-)
-
+// HandleDownloadImages
+// @Summary HandleDownloadImages
+// @Description download images from links file
+// @Tags Images
+// @Produce json
+// @Success 201
+// @Router /images/download [get]
 func (h *ImageHandlerImpl) HandleDownloadImages(c *gin.Context) {
 	// Open the links.txt file
 	file, err := os.Open(h.Config.Image.Source.FilePath)
