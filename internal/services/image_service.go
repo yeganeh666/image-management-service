@@ -111,7 +111,7 @@ func (s ImageServiceImpl) Get(id string) ([]byte, error) {
 		return nil, err
 	}
 
-	data, err := ioutil.ReadFile(s.Config.Image.DownloadPath + image.LocalName)
+	data, err := ioutil.ReadFile("./" + image.Path)
 	if err != nil {
 		log.WithError(err).Error("failed to read images directory")
 		return nil, err

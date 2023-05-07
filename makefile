@@ -37,3 +37,8 @@ run:
 	@echo "Running..."
 	@go run $(MAIN_DIR)/main.go
 
+docs:
+	@echo "Running.."
+	cd ./cmd && swag init --parseDependency=true --output "../docs"
+
+

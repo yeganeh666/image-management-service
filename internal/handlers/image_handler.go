@@ -7,10 +7,17 @@ import (
 	"sync"
 )
 
-const (
-	UploadPath = "./images/user-content/"
-)
-
+// HandleImagesUpload
+// @Summary HandleImagesUpload
+// @Description upload images
+// @Tags Images
+// @Param file	formData file true "images"
+//
+//	@Accept	multipart/form-data
+//
+// @Produce json
+// @Success 200
+// @Router /images/upload [post]
 func (h *ImageHandlerImpl) HandleImagesUpload(c *gin.Context) {
 
 	// Get list of uploaded files
@@ -18,7 +25,7 @@ func (h *ImageHandlerImpl) HandleImagesUpload(c *gin.Context) {
 	files := form.File["images"]
 
 	// Create directory if not exist
-	err := os.MkdirAll(UploadPath, 0755)
+	err := os.MkdirAll(h.Config.Image.UploadPath, 0755)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "Failed to create directory",
@@ -38,6 +45,13 @@ func (h *ImageHandlerImpl) HandleImagesUpload(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Upload successful"})
 }
 
+// HandleImagesList
+// @Summary HandleImagesList
+// @Description images list
+// @Tags Images
+// @Produce json
+// @Success 200 {array} models.Image
+// @Router /images [get]
 func (h *ImageHandlerImpl) HandleImagesList(c *gin.Context) {
 	images, err := h.ImageService.List()
 	if err != nil {
@@ -49,6 +63,14 @@ func (h *ImageHandlerImpl) HandleImagesList(c *gin.Context) {
 	c.JSON(http.StatusOK, images)
 }
 
+// HandleDownloadImage
+// @Summary HandleDownloadImage
+// @Description downoald an image from list
+// @Tags Images
+// @Param id path string true "image ID"
+// @Produce octet-stream
+// @Success 200
+// @Router /images/{id} [get]
 func (h *ImageHandlerImpl) HandleDownloadImage(c *gin.Context) {
 	id := c.Param("id")
 	// Read file from images directory
