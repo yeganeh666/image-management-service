@@ -1,0 +1,13 @@
+http:
+  address: "localhost"
+  port: "8080"
+postgres:
+  host: "postgres"
+  port: "5432"
+  db: "images"
+  user: "postgres"
+  pass: "postgres"
+image:
+  source_path: "./data/links.txt"
+  upload_path: "./images/user-content"
+  download_path: "./images/"

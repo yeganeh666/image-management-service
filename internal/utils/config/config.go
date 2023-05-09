@@ -12,7 +12,9 @@ http:
   address: "localhost"
   port: "8080"
 postgres:
-  host: "postgres"
+  connection:
+    file_path: "./config/postgres.secret"
+  host: "localhost"
   port: 5432
   db: "images"
   user: "postgres"

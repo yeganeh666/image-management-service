@@ -18,8 +18,9 @@ import (
 // @Router /images/download [get]
 func (h *ImageHandlerImpl) HandleDownloadImages(c *gin.Context) {
 	// Open the links.txt file
-	file, err := os.Open(h.Config.Image.Source.FilePath)
+	file, err := os.Open(h.Config.Image.SourcePath)
 	if err != nil {
+		h.log.WithError(err).Error("Error opening file")
 		c.String(http.StatusInternalServerError, "Error opening file")
 		return
 	}

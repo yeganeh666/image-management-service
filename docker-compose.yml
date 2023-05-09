@@ -1,0 +1,36 @@
+version: '3'
+
+networks:
+  image_service:
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./configs/config.yaml:/app/configs/config.yaml
+    networks:
+      - image_service
+    depends_on:
+      - postgres
+
+  postgres:
+    image: docker.arvancloud.com/postgis/postgis:12-master
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: images
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - image_service
+
+volumes:
+  postgres-data:
+
