@@ -23,12 +23,7 @@ func main() {
 		panic("failed to load service configuration")
 	}
 
-	docs.SwaggerInfo.Title = "Image Management Service"
-	docs.SwaggerInfo.Description = "Image Management Service : This is a simple upload/download service."
-	docs.SwaggerInfo.Version = "1.0"
-	docs.SwaggerInfo.BasePath = "/api"
-	docs.SwaggerInfo.Host = fmt.Sprintf("%v:%v", conf.HTTP.Address, conf.HTTP.Port)
-	docs.SwaggerInfo.Schemes = []string{"http"}
+	initSwagger(conf)
 
 	repository, err := repositories.NewRepository(log, conf)
 	if err != nil {
@@ -39,9 +34,19 @@ func main() {
 		repositories.NewImageRepository(repository))
 
 	handler := handlers.NewImageHandler(
-		conf,
+		log, conf,
 		services.NewImageService(service),
 		services.NewDownloaderService(service))
 
 	router.Register(handler)
+}
+func initSwagger(conf *config.Config) {
+
+	docs.SwaggerInfo.Title = "Image Management Service"
+	docs.SwaggerInfo.Description = "Image Management Service : This is a simple upload/download service."
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.BasePath = "/api"
+	docs.SwaggerInfo.Host = fmt.Sprintf("%v:%v", conf.HTTP.Address, conf.HTTP.Port)
+	docs.SwaggerInfo.Schemes = []string{"http"}
+
 }

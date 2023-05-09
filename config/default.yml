@@ -1,5 +1,5 @@
 http:
-  address: "127.0.0.1"
+  address: "localhost"
   port: "8080"
 postgres:
   connection:
