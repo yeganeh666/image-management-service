@@ -32,7 +32,13 @@ func (h *ImageHandlerImpl) HandleDownloadImages(c *gin.Context) {
 		url := scanner.Text()
 		if validation.IsValidImageURL(url) {
 			wg.Add(1)
-			go h.DownloaderService.Download(url, &wg)
+			go func() {
+				defer wg.Done()
+				err := h.DownloaderService.Download(url)
+				if err != nil {
+					h.log.WithError(err).Error("Failed to download image")
+				}
+			}()
 		}
 	}
 	if err := scanner.Err(); err != nil {

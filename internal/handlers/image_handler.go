@@ -36,7 +36,13 @@ func (h *ImageHandlerImpl) HandleImagesUpload(c *gin.Context) {
 	// Loop through the uploaded files and handle each one concurrently
 	for _, file := range files {
 		wg.Add(1)
-		go h.ImageService.Upload(file, wg)
+		go func() {
+			defer wg.Done()
+			err := h.ImageService.Upload(file)
+			if err != nil {
+				h.log.WithError(err).Error("Failed to upload image")
+			}
+		}()
 	}
 
 	// Wait for all the image uploads to finish before responding to the client

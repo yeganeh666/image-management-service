@@ -8,7 +8,8 @@ import (
 type Image struct {
 	gormext.UniversalModel
 	OriginalURL   string    `json:"original_url"`
-	LocalName     string    `json:"local_name"`
+	OriginalName  string    `json:"original_name"`
+	LocalURL      string    `json:"local_url"`
 	FileExtension string    `json:"file_extension"`
 	FileSize      int64     `json:"file_size"`
 	DownloadDate  time.Time `json:"download_date"`

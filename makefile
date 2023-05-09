@@ -1,5 +1,5 @@
 # Set the project name
-PROJECT_NAME=myproject
+PROJECT_NAME=image-management-service
 
 # Set the Golang version
 GO_VERSION=1.20
