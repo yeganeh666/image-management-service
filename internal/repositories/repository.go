@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"fmt"
 	"github.com/sirupsen/logrus"
 	"gorm.io/gorm"
 	"image-management-service/config"
@@ -14,8 +15,9 @@ type Repository struct {
 }
 
 func NewRepository(log *logrus.Logger, conf *config.Config) (*Repository, error) {
-
-	db, err := gormext.Open(conf.Postgres.Connection.GetValue())
+	dsn := fmt.Sprintf("postgresql://%v:%v@%v:%v/%v?sslmode=disable",
+		conf.Postgres.User, conf.Postgres.Pass, conf.Postgres.Host, conf.Postgres.Port, conf.Postgres.DB)
+	db, err := gormext.Open(dsn)
 	if err != nil {
 		log.WithError(err).Fatal("can not load repository configs")
 		return nil, err

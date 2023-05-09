@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"github.com/sirupsen/logrus"
 	"image-management-service/config"
@@ -11,16 +12,18 @@ import (
 	"image-management-service/internal/services"
 )
 
-const ServiceName = "ImageService"
-
 // @BasePath /api
 // image management service godoc
 
 func main() {
 	log := logrus.New()
-	conf, err := config.NewConfig(ServiceName)
+
+	defaultConf := flag.Bool("default-configs", false, "run program with default config")
+	flag.Parse()
+
+	conf, err := config.LoadConfigs(*defaultConf)
 	if err != nil {
-		panic("failed to load service configuration")
+		log.Panic("failed to read configs")
 	}
 
 	initSwagger(conf)
